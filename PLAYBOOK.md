@@ -150,6 +150,11 @@ Whatever your tokens are: encode them ONCE as constants in the overlay scripts, 
 - Organize by folder: cook/kitchen process b-roll, pets eating, customer UGC, finished output. Check the process-footage folder FIRST for "how it's made" content.
 - The "money shot" may live in someone's phone Photos library, not the shared drive. Ask.
 
+**Library limits (learned the hard way):**
+- A pets-eating folder can look big (23 clips) yet contain only ~4 distinct animals - sequential filenames usually mean one session, one pet. A montage-heavy reel exhausts distinct subjects fast; track subjects, not clip counts, and keep asking for fresh footage of NEW animals.
+- Customer UGC (reposted stories) has baked-in usernames + text overlays = unusable as clean b-roll. UGC works for social-proof cuts only.
+- Keep a per-video **clip usage ledger** (which source clip went into which published video). It is what makes the "never repeat footage" rule enforceable by query instead of memory.
+
 **Two-phone founder takes:** shoot every founder take on two phones - one camera angle (room audio, DON'T use the audio) and one with the wireless lav mic (clean audio, ALWAYS use). **Video can come from either angle; audio ALWAYS from the mic phone.** Sync the two via envelope cross-correlation (extract 16k mono WAVs, correlate a clear-speech window).
 
 ---
@@ -203,7 +208,7 @@ The single biggest unlock: convert the "invisible to the agent" defect class int
 - **Chopped-word check:** re-transcribe the RENDERED output with whisper, diff against the script. A word that didn't survive the render was chopped at a cut. Deterministic, no ears needed.
 - **Fold everything into one `qa_check.py` "screening room" gate** with per-format profiles: coverage + freeze + jitter + click + chopped-word + loudness + safe-zone + sharpness + variety. Exit non-zero = never reaches the human.
 
-### Phase 2 - Consolidate on Remotion as THE engine
+### Phase 2 - Consolidate on Remotion as THE engine (IN PROGRESS - first full reel shipped natively 2026-07-02)
 Remotion (React-coded video) does natively + deterministically everything the PIL pipeline hand-rolls, kills the zoompan-jitter class, and adds polish (springs, draw-on circles, stat count-ups, kinetic type).
 - **Component library:** `<WordCaptions>` (whisper JSON in, clamped no-overlap, keyword pops), `<Sticker>`, `<DrawCircle>`, `<StatCountUp>`, `<CompositionBar>`, `<EatingMontage>`, `<HookTitle>`, `<EndCard>`, `<LogoBadge>` - with safe zones + brand tokens as enforced constants, not conventions.
 - **Data-driven `<Reel>`:** one composition that takes a cutplan JSON (segments, broll windows, captions, emoji, VO path). A new video = write JSON + pick clips, zero new code. This is the real path to one-prompt.
