@@ -99,6 +99,7 @@ Exit non-zero = do NOT ship. Then read rendered frames densely at every transiti
 | **Be decisive.** When the directive is clear, use best judgment and execute. Don't ping-pong options or ask "which clip?" mid-task. | The whole point is one-prompt output. |
 | **Verify before claiming.** Read the rendered frames at changed timestamps before saying it's fixed. | No exceptions. |
 | **Never conclude "footage doesn't exist" from a filename search.** | Library files are named content-blind (`IMG_4155.MOV`). Find by FOLDER + visual sample. |
+| **Overlays must NEVER cover a face (pet or human).** Before rendering, extract start/mid/end frames of EVERY sticker/title window and check placement against the subject. A fixed default y-position is a starting point, not an answer - pet faces sit top-center exactly where top-band stickers land. Below-the-face (above the subtitle band) is the usual fix. | The face IS the content; text on it kills the beat. Safe-zone (notch) checks alone don't catch this. Caught post-render = a full re-render. |
 | **Things the agent CAN'T self-verify** (no ears, frames-only): audio clicks, lip-sync, motion jitter, hard-cut-vs-natural-movement. | Design so you don't need them; else say "please verify by ear". |
 
 When clipping a short cut out of a finished video that used xfade transitions: **start the extract AFTER the incoming crossfade completes and end BEFORE the outgoing one begins** - else the first/last ~0.12s is a ghost-blend of two shots ("weird jittery thing").
