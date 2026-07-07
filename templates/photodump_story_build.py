@@ -124,11 +124,11 @@ for i,(dur,src,inp,lines,sfx) in enumerate(BEATS):
 a_inputs=[]; a_fc=""
 for j,(at,kind) in enumerate(sfx_events):
     a_inputs+=["-i","%s/%s.wav"%(SFX,kind)]
-    a_fc+="[%d:a]adelay=%d|%d,volume=%s[a%d];"%(len(overlays)+1+j,int(at*1000),int(at*1000),{"ding":"0.5","bell":"0.5","boom":"0.65","riser":"0.45","shutter":"0.3","sparkle":"0.5","chaching":"0.5","pop":"0.4","whoosh":"0.4"}.get(kind,"0.4"),j)
+    a_fc+="[%d:a]adelay=%d|%d,volume=%s,apad=whole_dur=%s[a%d];"%(len(overlays)+1+j,int(at*1000),int(at*1000),{"ding":"0.7","bell":"0.7","boom":"0.85","riser":"0.6","shutter":"0.45","sparkle":"0.7","chaching":"0.7","pop":"0.55","whoosh":"0.55"}.get(kind,"0.55"),VID_END,j)
 amix="".join("[a%d]"%j for j in range(len(sfx_events)))
-a_fc+="%samix=inputs=%d:normalize=0[sfx];[sfx]apad=whole_dur=%s[aout]"%(amix,len(sfx_events),VID_END)
+a_fc+="%samix=inputs=%d:duration=first:dropout_transition=0:normalize=0,alimiter=limit=0.85[aout]"%(amix,len(sfx_events))
 fc=fc+a_fc
 
 run([FF,"-y",*inputs,*a_inputs,"-filter_complex",fc,"-map",last,"-map","[aout]",
-     "-t",str(VID_END),"-c:v","libx264","-crf","19","-pix_fmt","yuv420p","-c:a","aac","-b:a","192k","%s/ep15_founderstory_v2.mp4"%B])
-print("DONE %s/ep15_founderstory_v2.mp4 end=%s sfx=%d"%(B,VID_END,len(sfx_events)))
+     "-t",str(VID_END),"-c:v","libx264","-crf","19","-pix_fmt","yuv420p","-c:a","aac","-b:a","192k","%s/ep15_founderstory_v3.mp4"%B])
+print("DONE %s/ep15_founderstory_v3.mp4 end=%s sfx=%d"%(B,VID_END,len(sfx_events)))

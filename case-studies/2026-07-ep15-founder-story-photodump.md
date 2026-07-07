@@ -19,3 +19,6 @@ Design grammar used: **boom** under the hook, **shutter** on every photo cut (th
 
 ## Sourcing lesson
 NAS index (metadata CSV with an online_only flag) made casting fast, BUT the flag goes stale - files evicted since indexing re-hydrate on read and a "quick thumbnail" of five 500MB MOVs can time out. Filter candidates by size + local flag, thumbnail small files first, copy selects into the build dir before cutting.
+
+## v3: the amix silence bug (founder reported "no sound")
+`amix` treats an input that ENDS as a dropout and ramps the mix down - with 15 short adelay'd SFX streams, everything after the first sound faded to digital silence even though volumedetect showed a healthy max (the boom). **Rule: pad every SFX stream to the full video duration (`adelay,volume,apad=whole_dur=END`) BEFORE amix, then `amix=duration=first:dropout_transition=0:normalize=0` + a limiter.** Verify with per-window RMS (`astats=reset=1`), not just volumedetect max - a single loud hook masks a dead track.
