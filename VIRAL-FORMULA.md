@@ -20,6 +20,14 @@ Every viral reel is a tiny story:
 - **Text hook** on screen immediately (bold, short). Title/series badge drops a *beat later*, not at 0s.
 - **Series framing** for retention + binge: "ep.1", "ATTN: PAWRENTS", a named recurring segment - a recurring badge/sting brands it as a series people follow.
 
+### Hook strength (field feedback from a full-time creator, 2026-07)
+Direct review of our cuts: hooks were too soft, pace too slow, cuts not clean enough.
+- **State the loss/stakes in first person, with a number, in caps-energy**: "I LOST $600 ON MY OWN ORDER, here's why" - not "here's what happened with an order". The formula: `[I/WE] + [dramatic verb] + [specific number] + [open loop]`.
+- A hook must contain at least ONE of: a number, a loss, a confession, or a contradiction. If it has none, rewrite before doing anything else.
+- **Test**: would a stranger who doesn't know the brand stop scrolling? "Our order got refunded" = no. "I LOST $600 ON MY OWN ORDER" = yes.
+- Faster pace: if a shot isn't earning its length, cut it. Default shot length ~1.2-1.5s when VO-driven (verified against kaiandjia top reels: 1.23-1.35s/shot).
+- Cleaner cuts: cut ON the word boundary, never mid-breath; no residual frames from the previous clip; audio never overlaps sloppily across a cut.
+
 ## 3. Voice & delivery (this is what makes it feel human)
 The reference creators all sound **conversational, enthusiastic, and personal** - varied intonation, talking TO one person, imperfect and real. Flat/monotone kills it.
 - Talk to "you" like a friend, not an audience. Energy up, pace quick, personality on.
