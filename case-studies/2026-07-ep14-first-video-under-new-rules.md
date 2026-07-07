@@ -19,3 +19,10 @@ For any "industry secret" claim, screenshot the PRIMARY SOURCE (Google Patents p
 
 ## Pre-ship verification state
 Deterministic checks passed (duration 28.0s exact, receipt legibility frame-checked, no within-video footage reuse, safe zones respected). Flagged for human playback: VO energy/feel, cut rhythm in motion, and two kibble-bowl clips that belong to a clip family used in an older reel (cross-video reuse minimized but not zero).
+
+## v2 iteration (founder review of v1)
+Feedback: voice slightly robotic, one weird mid-phrase pause ("Fur... the record"), pacing approved, hook "kind of sucks u in", wants more footage variety across episodes.
+1. **Voice-clone naturalness**: stability 0.30/style 0.50/speed 1.16 reads robotic. The energy settings (stability 0.14, style 0.68, speed 1.10) are the better default for founder VO. Slower speed lengthens the whole VO (~+12%%) - re-derive every segment + caption window from the fresh word timestamps.
+2. **TTS pause bug + fix**: unusual multi-word phrases (brand puns like "Fur the record") make the clone insert a sentence-break pause mid-phrase. Hyphenate to force connection: "fur-the-record?". 
+3. **Deterministic pause QA**: parse the timestamp JSON and flag any intra-sentence word-start gap >0.8s. The agent can't hear; this check catches what ears would.
+4. **Footage-variety debt is real**: by video ~7 on the same b-roll library, the founder notices repetition. Maintain a per-reel ledger of which NAS footage FAMILIES have been used, and require each new reel to pull at least one never-used family. (Our unlock: the founder's own dog's feeding-POV folder - 21 fresh clips, instantly the most charming shots in the cut.)
