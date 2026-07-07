@@ -13,6 +13,7 @@ The north star: **a postable-quality video out of ONE prompt.** Every rule here 
 | [PLAYBOOK.md](PLAYBOOK.md) | The end-to-end production framework: formats, pipeline recipe, hard rules, QA gate, tooling, and the quality-upgrade roadmap |
 | [VIRAL-FORMULA.md](VIRAL-FORMULA.md) | The 5-beat content formula synthesized from frame-by-frame study of 9 reference reels |
 | [RESEARCH-instagram-growth.md](RESEARCH-instagram-growth.md) | Adversarially-verified deep research: what kinds of videos grow an account (and which "best practices" are folklore) |
+| [case-studies/](case-studies/) | Frame-by-frame decodes of specific reference reels (downloaded, cut-detected, transcribed) - the raw evidence behind the formula |
 
 ## Why an AI agent can edit video (and where it can't)
 
