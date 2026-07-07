@@ -26,3 +26,12 @@ Feedback: voice slightly robotic, one weird mid-phrase pause ("Fur... the record
 2. **TTS pause bug + fix**: unusual multi-word phrases (brand puns like "Fur the record") make the clone insert a sentence-break pause mid-phrase. Hyphenate to force connection: "fur-the-record?". 
 3. **Deterministic pause QA**: parse the timestamp JSON and flag any intra-sentence word-start gap >0.8s. The agent can't hear; this check catches what ears would.
 4. **Footage-variety debt is real**: by video ~7 on the same b-roll library, the founder notices repetition. Maintain a per-reel ledger of which NAS footage FAMILIES have been used, and require each new reel to pull at least one never-used family. (Our unlock: the founder's own dog's feeding-POV folder - 21 fresh clips, instantly the most charming shots in the cut.)
+
+## FINAL iteration (v3): the two missing layers + full automation
+Founder asked "why no captions ah? and no animations?" - v2 had topic stickers but not the two things every studied reel has:
+1. **Read-along captions** (word-synced, 2-4 word phrases, white Fredoka + soft shadow, ~65% height) generated automatically from the VO timestamp JSON. This is the layer that makes the video work MUTED.
+2. **Pop-in animation** on every sticker/caption/emoji: overlay a 1.13x copy for the first 0.09s, then the 1.0x. Two overlays per element; 99 overlay layers total, ffmpeg handles it fine.
+3. **Pronunciation fix**: the voice clone read "sous vide" as "sos-vide". Respell phonetically in the VO text ("soo veed") + a DISPLAY substitution map so on-screen captions still show the correct spelling. Generalizes to any foreign/brand word.
+4. **Anchor-driven timing** (templates/anchor_driven_reel_build.py): segment durations and caption windows are computed from anchor WORDS found in the timestamp JSON, not hard-coded times - regenerating the VO re-aligns the entire edit automatically. Gotcha: strip punctuation from BOTH sides of an anchor comparison ("fur-the-record?" vs "fur-the-record").
+
+Templates now in [templates/](../templates/): `anchor_driven_reel_build.py` (segments + stickers + read-along + pop-ins + mux) and `gen_vo_with_timestamps.py` (ElevenLabs with-timestamps → normalized mp3 + word-times JSON).
