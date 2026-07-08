@@ -6,6 +6,9 @@ import os, json, hashlib, subprocess
 
 FF = os.environ.get("REEL_FFMPEG", "/opt/homebrew/bin/ffmpeg")
 PROXY = os.environ.get("REEL_PROXY") == "1"          # REEL_PROXY=1 -> fast low-res preview
+AUDIO = os.environ.get("REEL_AUDIO") == "1"          # REEL_AUDIO=1 -> keep natural/diegetic sound (ASMR).
+# Music is NEVER baked in (copyright); it is added in-app. Natural footage sound IS safe to bake.
+# A still, or a video spec with {"mute": true}, gets a silent 48k stereo track so concat stays uniform.
 
 # Iterate at proxy res/fps; ship full-res. Rendering time is THE bottleneck (Thariq), so make it optional.
 W, H   = (540, 960) if PROXY else (1080, 1920)
@@ -19,30 +22,42 @@ def run(cmd):
         print("ERR", cmd[-1]); print(r.stderr[-800:]); raise SystemExit(1)
     return r
 
+SILENCE = "anullsrc=channel_layout=stereo:sample_rate=48000"
+
 def _sig(spec):
-    # cache key = everything that changes this segment's pixels (spec + render profile)
-    payload = json.dumps(spec, sort_keys=True) + f"|{W}x{H}@{FPS}c{CRF}"
+    # cache key = everything that changes this segment (spec + render profile, incl. audio mode)
+    payload = json.dumps(spec, sort_keys=True) + f"|{W}x{H}@{FPS}c{CRF}|a{int(AUDIO)}"
     return hashlib.sha1(payload.encode()).hexdigest()[:12]
 
 def cut_segment(spec, cache_dir):
-    # spec = {"src","in","dur"} for footage, or {"still","dur","bg"?} for a letterboxed still.
+    # spec = {"src","in","dur","mute"?} for footage, or {"still","dur","bg"?} for a letterboxed still.
     # Incremental cache: identical spec+profile reuses the encoded file, skips ffmpeg entirely.
     os.makedirs(cache_dir, exist_ok=True)
     out = os.path.join(cache_dir, f"seg_{_sig(spec)}.mp4")
     if os.path.exists(out) and os.path.getsize(out) > 0:
         return out, True
     d = round(float(spec["dur"]), 3)
-    if "still" in spec:
-        bg = spec.get("bg", "FFF3DF")
+    still = "still" in spec
+    silent = still or spec.get("mute")            # stills + muted clips get a silent track under AUDIO
+    cmd = [FF, "-y"]
+    if still:
+        cmd += ["-loop","1","-t",str(d),"-i",spec["still"]]
         vf = (f"scale={W}:{H}:force_original_aspect_ratio=decrease,"
-              f"pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0x{bg},setsar=1,fps={FPS},format=yuv420p")
-        run([FF,"-y","-loop","1","-t",str(d),"-i",spec["still"],"-vf",vf,"-r",str(FPS),
-             "-c:v","libx264","-crf",CRF,"-preset",PRESET,"-pix_fmt","yuv420p","-an",out])
+              f"pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0x{spec.get('bg','FFF3DF')},setsar=1,fps={FPS},format=yuv420p")
     else:
-        vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
-              f"setsar=1,fps={FPS},format=yuv420p")
-        run([FF,"-y","-ss",str(spec.get("in",0)),"-t",str(d),"-i",spec["src"],"-vf",vf,"-r",str(FPS),
-             "-c:v","libx264","-crf",CRF,"-preset",PRESET,"-pix_fmt","yuv420p","-an",out])
+        cmd += ["-ss",str(spec.get("in",0)),"-t",str(d),"-i",spec["src"]]
+        vf = f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps={FPS},format=yuv420p"
+    if AUDIO and silent:
+        cmd += ["-f","lavfi","-t",str(d),"-i",SILENCE]
+    cmd += ["-vf",vf,"-r",str(FPS),"-c:v","libx264","-crf",CRF,"-preset",PRESET,"-pix_fmt","yuv420p"]
+    if not AUDIO:
+        cmd += ["-an"]
+    elif silent:
+        cmd += ["-map","0:v","-map","1:a","-c:a","aac","-ar","48000","-ac","2","-shortest"]
+    else:
+        cmd += ["-af","aresample=48000","-ac","2","-c:a","aac"]   # keep the clip's natural sound
+    cmd += [out]
+    run(cmd)
     return out, False
 
 def build_segments(cutlist_path, cache_dir):
@@ -61,8 +76,9 @@ def concat(paths, out_path):
     lst = out_path + ".list.txt"
     with open(lst, "w") as f:
         for p in paths: f.write("file '%s'\n" % p)
+    a = ["-c:a","aac","-ar","48000","-ac","2"] if AUDIO else ["-an"]
     run([FF,"-y","-f","concat","-safe","0","-i",lst,"-r",str(FPS),
-         "-c:v","libx264","-crf",CRF,"-preset",PRESET,"-pix_fmt","yuv420p","-an",out_path])
+         "-c:v","libx264","-crf",CRF,"-preset",PRESET,"-pix_fmt","yuv420p",*a,out_path])
     return out_path
 
 def load_fixes(path="transcript-fixes.json"):
