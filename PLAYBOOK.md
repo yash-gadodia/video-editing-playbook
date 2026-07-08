@@ -66,6 +66,7 @@ Our ffmpeg build has **no libass, no drawtext, no freetype**. So *every* caption
 - **NEVER `-c copy` concat** for an overlay base - timestamp discontinuities freeze the fps filter. Always concat-FILTER re-encode. ffprobe every trimmed seg (library trims come out short) and rebuild overlay times from ACTUAL cumulative durations.
 - `xfade`/`acrossfade` need `settb=AVTB` on both inputs and the SAME duration on audio + video (or they desync over the chain).
 - Output: 1080x1920, H.264, ~crf 18-19, `-preset veryfast` (IG re-compresses anyway).
+- **Proxy-first iteration + segment cache** (rendering time is the real bottleneck): render segments through `lib_reel` so each cut is content-hash cached (change one clip, only that segment re-encodes) and `REEL_PROXY=1` renders 540x960/15fps/ultrafast for fast preview loops. Only the final ship render runs full-res. When exploring, do a **few divergent low-res cuts** and pick, rather than polishing one.
 - **Audio chain MUST end with `aresample=48000` + output `-ar 48000 -ac 2`.** `loudnorm` upsamples to 96kHz → macOS preview plays it SILENT. This bug has bitten multiple times.
 - Add a ~25ms `afade` in+out on each audio segment boundary (jump-cut concat clicks otherwise).
 
@@ -162,7 +163,8 @@ Whatever your tokens are: encode them ONCE as constants in the overlay scripts, 
 
 ## 7. Reusable machinery (patterns, not one-offs)
 
-- **Cutplan-as-JSON:** per-episode build scripts carry the cutplan as data (`CUTS`/`ZOOMS`/`CARDS`/word-FIXES) so a new episode = edit the data, not the code.
+- **Cutplan-as-JSON:** per-episode build scripts carry the cutplan as data (`CUTS`/`ZOOMS`/`CARDS`/word-FIXES) so a new episode = edit the data, not the code. Shipped helper: `templates/lib_reel.py` `build_segments(cuts.json)` reads an editable cutlist (`templates/cuts.example.json`), renders each segment with an **incremental content-hash cache** (unchanged segment = skip ffmpeg entirely) and an env `REEL_PROXY=1` **low-res proxy** mode. Externalize word-FIXES too: `templates/transcript-fixes.example.json`.
+- **Transcribe existing footage, not just VO:** `templates/transcribe_footage.py` runs word-level Whisper over raw takes → per-clip `words.json` (cached, only new/changed clips do work), applying the transcript-fixes layer. This is what lets you pick cuts off a transcript for founder/testimonial takes (formats A/B), the same way format D anchors off `vo_words.json`.
 - **One full-recipe UGC-reel script** (match-cut align + beat-sync + per-cut brand sticker captions + emoji + logo + intro/CTA + music): clone it and edit the segment list.
 - **A founder-series job folder** including `qa_check.py` (the QA gate) - copy per job.
 - **BTS/screen-walkthrough machinery** (format D): asset builder + live-card renderer + final render script. Two card types: LIVE cards (pre-rendered MP4s for clean screens) and STILL cards (PIL PNGs with PII baked-in-blurred).
@@ -213,7 +215,7 @@ The single biggest unlock: convert the "invisible to the agent" defect class int
 Remotion (React-coded video) does natively + deterministically everything the PIL pipeline hand-rolls, kills the zoompan-jitter class, and adds polish (springs, draw-on circles, stat count-ups, kinetic type).
 - **Component library:** `<WordCaptions>` (whisper JSON in, clamped no-overlap, keyword pops), `<Sticker>`, `<DrawCircle>`, `<StatCountUp>`, `<CompositionBar>`, `<EatingMontage>`, `<HookTitle>`, `<EndCard>`, `<LogoBadge>` - with safe zones + brand tokens as enforced constants, not conventions.
 - **Data-driven `<Reel>`:** one composition that takes a cutplan JSON (segments, broll windows, captions, emoji, VO path). A new video = write JSON + pick clips, zero new code. This is the real path to one-prompt.
-- ffmpeg's role shrinks to clip pre-normalization. Iterate on 540x960/15fps proxy renders; full-res only to ship. Scrub cuts live in `npm run studio`.
+- ffmpeg's role shrinks to clip pre-normalization. Iterate on 540x960/15fps proxy renders; full-res only to ship. Scrub cuts live in `npm run studio`. (Proxy + incremental segment cache already available in the ffmpeg path today via `templates/lib_reel.py` - carry the same two properties into the Remotion `<Reel>`.)
 - ⚠️ Check the Remotion license: the free tier is for companies of ≤3 people; bigger teams need a Company License before shipping regularly.
 
 ### Phase 3 - Scored, tagged shot library
@@ -228,3 +230,16 @@ One-time pass over the footage index → `shots.json`: per clip, a midframe + au
 **Explicitly out of scope:** generative footage (Runway etc.) - real footage only. The quality gap is craft + verification, not synthesis.
 
 **Only-human dependencies:** (1) the hyped VO training take, (2) the Remotion license decision, (3) retention screenshots after each post.
+
+---
+
+## 11. Code-driven editing: composable, cached, proxy-first
+
+Adopted 2026-07-08 from Thariq Shihipar (Anthropic Claude Code team, [@trq212](https://x.com/trq212/status/2074617786408845774)), who edited his AI Engineer talk (59GB of raw footage + an HTML deck) end-to-end by having Claude/Fable drive a small harness of "scripts + Remotion assets". His method validated the direction this playbook was already heading and sharpened four things:
+
+1. **Composable intermediate artifacts, not a monolith.** Break the job into files that are cheap to edit: a transcript `words.json`, an editable `cuts.json`, a `transcript-fixes.json`, overlay specs. Iterating = editing JSON and re-running, never re-threading Python. (`templates/cuts.example.json`, `templates/lib_reel.py::build_segments`.)
+2. **Word-level transcription is the backbone** for both caption sync and cut points, for VO *and* raw footage. Whisper silently drops/mangles words, so a `transcript-fixes.json` correction layer is mandatory, not optional. (`templates/transcribe_footage.py`.)
+3. **Incremental cache: only new/changed work runs.** Every segment is keyed by its spec + render profile; an unchanged cut is reused, not re-encoded. On long footage this is the difference between a 5-second and a 5-minute iteration. (`lib_reel.cut_segment`.)
+4. **Proxy-first: rendering time is THE bottleneck.** Iterate at 540x960/15fps/ultrafast (`REEL_PROXY=1`), render a few divergent low-res cuts to compare, and only run full-res once to ship. Having the deck/site as HTML lets the agent generate dynamic animations and composite over it, rather than screenshotting stills (see [[real website screenshots]] rule, then go further and animate them).
+
+His library is closed-source for now; he said he may open-source it. Until then this section + the `templates/` helpers are our version of the same idea. Use subagents for ambitious multi-cut exploration.

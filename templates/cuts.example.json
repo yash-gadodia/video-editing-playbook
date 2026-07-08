@@ -1,0 +1,10 @@
+{
+  "_comment": "Editable cutlist consumed by lib_reel.build_segments(). Iterate on THIS file, not the Python. Each segment: footage {src,in,dur} or a letterboxed still {still,dur,bg?}. Durations can be written by an anchor pass from vo_words.json.",
+  "segments": [
+    {"src": "broll/video/IMG_4500.MOV", "in": 0.0, "dur": 1.4},
+    {"src": "broll/cook/IMG_4167.MOV", "in": 0.8, "dur": 1.6},
+    {"still": "assets/patent_receipt.png", "dur": 1.2, "bg": "FFF3DF"},
+    {"src": "broll/cook/IMG_4165.MOV", "in": 52.0, "dur": 2.1},
+    {"src": "talent/Lola/IMG_2752.MOV", "in": 1.0, "dur": 1.3}
+  ]
+}

@@ -15,6 +15,7 @@ The north star: **a postable-quality video out of ONE prompt.** Every rule here 
 | [EDITING-RULES.md](EDITING-RULES.md) | The mechanical rulebook: hooks, pacing, cuts, captions, sound, structure - every rule tagged by evidence tier ([OBSERVED]/[CRAFT]/[STAT]) |
 | [RESEARCH-instagram-growth.md](RESEARCH-instagram-growth.md) | Adversarially-verified deep research: what kinds of videos grow an account (and which "best practices" are folklore) |
 | [case-studies/](case-studies/) | Frame-by-frame decodes of specific reference reels (downloaded, cut-detected, transcribed) - the raw evidence behind the formula |
+| [templates/](templates/) | Runnable machinery: VO+word-timestamps, anchor-driven + photo-dump builds, and the composable/cached/proxy-first helpers (`lib_reel.py`, `transcribe_footage.py`, `cuts.example.json`) |
 
 ## Why an AI agent can edit video (and where it can't)
 
