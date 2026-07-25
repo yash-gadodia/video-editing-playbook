@@ -49,8 +49,11 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 2. `[CRAFT]` SFX on cuts (whoosh/pop/click) sparingly, on beat - transitions feel "clean" largely because of sound.
 3. `[OBSERVED]` No-VO story reels: ironic/emotional trending-audio pairing does the emotional captioning (happy couple + "now that you're gone" lyric).
 4. `[CRAFT]` One second of near-silence right before the single most important line.
-5. House rule kept: export a clean no-**music** master so trending audio can be added in-app. **Music** never bakes in (copyright).
-6. `[CRAFT]` **Natural/diegetic sound is not music - keep it.** Teasers and food/ASMR reels often need NO VO; the footage's own sound (broth pouring, a cube popping, a furkid crunching/lapping) is the hook and is copyright-safe to bake into the master. Distinguish: strip music, keep diegetic sound. (`REEL_AUDIO=1` in `lib_reel` keeps clip audio; stills/muted clips get a silent track so the concat stays uniform. The founder can still layer quiet trending audio in-app on top, or leave it pure ASMR.)
+5. `[FIELD]` **Silent clips feel bare.** Footage with no diegetic sound (muted UGC, stills) exposed under bare VO reads unfinished. Default to a music bed when the footage itself is silent. UPDATED house rule: music MAY bake in when rights are cleared (your own royalty-free library, e.g. CC-BY tracks with a caption credit, or a platform music allowance for your account). Trending/uncleared audio still gets layered in-app, never baked.
+   - Bed it as ONE continuous ducked track, never patchwork music only on the silent clips - patchwork reads as broken audio.
+   - Duck the bed hard (near-zero) under any diegetic ASMR beat so the natural sound stays the star, and fade the bed out over the last ~1.2s.
+6. `[FIELD]` **Engineer diegetic gaps by splitting the VO.** TTS voices can't hold a long pause. Generate the VO as two files (A ends on the "sound on" line, B resumes after), place B at `A_end + gap`, and let the clip's natural sound own the gap at full volume. Word-timestamp anchors still work per part with the offset added.
+7. `[CRAFT]` **Natural/diegetic sound is not music - keep it.** Teasers and food/ASMR reels often need NO VO; the footage's own sound (broth pouring, a cube popping, a furkid crunching/lapping) is the hook and is copyright-safe to bake into the master. Distinguish: strip music, keep diegetic sound. (`REEL_AUDIO=1` in `lib_reel` keeps clip audio; stills/muted clips get a silent track so the concat stays uniform. The founder can still layer quiet trending audio in-app on top, or leave it pure ASMR.)
 
 ## 6. Structure (the retention skeleton)
 1. `[OBSERVED]` The AI-demo/how-to skeleton (gabrieljudah, 122s): promise → free/easy → "but here's the catch" → most-people's-mistake → the opposite → receipts ("that video went viral", counts on screen) → numbered steps → quotable aphorism → comment-keyword CTA.
@@ -59,7 +62,14 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 4. `[CRAFT]` Loop-back endings (last shot flows into the first) inflate completion via replays.
 5. `[OBSERVED]` Receipts beat: show real numbers on screen (view counts, revenue, order counts) during the fastest-cut section.
 
-## 7. What we explicitly do NOT import (quarantined folklore)
+## 7. UGC-sourced edits (compilations, testimonial reels)
+1. `[FIELD]` **QA every chosen clip's baked-in text for creator promo/referral codes BEFORE building.** Customer story reposts often carry the creator's personal discount code baked into the frame. Cropping rarely hides it cleanly - replace the clip instead.
+2. `[FIELD]` Visible usernames/story stickers in UGC are receipts, not clutter - keep them. They ARE the authenticity. Place your overlays around them.
+3. `[FIELD]` Caption y-position is per-clip, not global. A y that clears one clip's subject sits on the next clip's face. Split a caption into windows with different y per segment when the subject moves (and re-check every window against faces - a top-of-frame default is not an answer).
+4. `[FIELD]` Check your display font's glyph coverage before shipping stickers - symbol glyphs (e.g. ★) silently render as nothing in some display fonts. Spell it out ("4.8/5") or render the symbol as an emoji layer.
+5. `[FIELD]` Survey footage by contact sheet (1 mid-frame thumb per clip, grid, indexed), shortlist, then verify motion with 3-frame strips per candidate. Never pick from filenames.
+
+## 8. What we explicitly do NOT import (quarantined folklore)
 Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the marketing-blog versions of: trending-audio reach multipliers, micro-influencer superiority, optimal posting cadence, format-type preference stats, "67% more trusted" UGC numbers. The verified fundamentals remain: **watch time, completion, replays, shares** are the ranking signals; read first-party retention data, not listicles.
 
 ## The pre-render gate (run before every render)
@@ -68,6 +78,8 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 3. Pace: VO shots ≤1.5s avg, cuts clustered around receipts, no frame unchanged >5s.
 4. Cuts: word-boundary cuts, J/L where VO flows across, no residual frames.
 5. Captions: ≤5 words, out of notch zone, never on a face.
-6. Sound: music ducked, works muted, clean master exported.
+6. Sound: music ducked (bed dipped near-zero under ASMR beats), works muted, silent footage has a bed (bare = unfinished).
 7. Structure: open loop in first third, receipts shown not told, comment-bait or loop-back ending.
 8. House QA (from PLAYBOOK.md): no repeated footage, stills static, real labels, coverage/frozen-frame/chopped-word checks.
+9. UGC: no baked promo/referral codes in any chosen clip; overlay y checked per clip against faces; font glyphs verified.
+10. After shipping: push the session's new learnings to this repo, same session. The rulebook only compounds if every build pays into it.
