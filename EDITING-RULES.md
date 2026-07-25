@@ -17,6 +17,7 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 4. `[OBSERVED]` Pinned context banner top-center for first ~10s tells mid-scrollers what they're watching. Below the top-18% notch zone.
 5. `[CRAFT]` Cold-open mid-action; never open on a logo, an establishing shot, or a greeting.
 6. `[CRAFT]` Fragment the first sentence - cut to the next shot mid-thought so the brain follows the incomplete pattern.
+7. `[FIELD]` **No jargon in the hook.** If anyone has to ask what a word means, the scroll is already gone. Technical terms live on receipt surfaces (site screenshots, tables) where they signal expertise; the hook gets playground words ("cats NEED meat. period." beats "obligate carnivores"). Field-tested: the founder himself asked what the fancy word meant.
 
 ## 2. Pacing
 1. `[OBSERVED]` VO-driven reels: average shot 1.2-1.5s (measured: 1.23-1.35s across kaiandjia's product reels; our old default of ~2.5s is too slow).
@@ -52,7 +53,9 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 5. `[FIELD]` **Silent clips feel bare.** Footage with no diegetic sound (muted UGC, stills) exposed under bare VO reads unfinished. Default to a music bed when the footage itself is silent. UPDATED house rule: music MAY bake in when rights are cleared (your own royalty-free library, e.g. CC-BY tracks with a caption credit, or a platform music allowance for your account). Trending/uncleared audio still gets layered in-app, never baked.
    - Bed it as ONE continuous ducked track, never patchwork music only on the silent clips - patchwork reads as broken audio.
    - Duck the bed hard (near-zero) under any diegetic ASMR beat so the natural sound stays the star, and fade the bed out over the last ~1.2s.
-6. `[FIELD]` **Engineer diegetic gaps by splitting the VO.** TTS voices can't hold a long pause. Generate the VO as two files (A ends on the "sound on" line, B resumes after), place B at `A_end + gap`, and let the clip's natural sound own the gap at full volume. Word-timestamp anchors still work per part with the offset added.
+   - Field-tested bed level: ~0.06-0.08 gain under VO. Our first default (0.12) was immediately flagged as too loud by the founder.
+6. `[FIELD]` **Engineer diegetic gaps by splitting the VO.** TTS voices can't hold a long pause. Generate the VO as two files (A ends on the "sound on" line, B resumes after), place B at `A_end + gap`, and let the clip's natural sound own the gap. Word-timestamp anchors still work per part with the offset added.
+   - **Level-match the gap.** "Full volume" is only right for genuinely quiet ASMR sound (soft eating, pouring). Noisy room audio at 1.0 after a ducked section is a jarring wall - lift it to ~0.4 instead. Verify with volumedetect: the gap should sit +1 to +3dB above its neighbors, not +8.
 7. `[CRAFT]` **Natural/diegetic sound is not music - keep it.** Teasers and food/ASMR reels often need NO VO; the footage's own sound (broth pouring, a cube popping, a furkid crunching/lapping) is the hook and is copyright-safe to bake into the master. Distinguish: strip music, keep diegetic sound. (`REEL_AUDIO=1` in `lib_reel` keeps clip audio; stills/muted clips get a silent track so the concat stays uniform. The founder can still layer quiet trending audio in-app on top, or leave it pure ASMR.)
 
 ## 6. Structure (the retention skeleton)
@@ -81,5 +84,6 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 6. Sound: music ducked (bed dipped near-zero under ASMR beats), works muted, silent footage has a bed (bare = unfinished).
 7. Structure: open loop in first third, receipts shown not told, comment-bait or loop-back ending.
 8. House QA (from PLAYBOOK.md): no repeated footage, stills static, real labels, coverage/frozen-frame/chopped-word checks.
-9. UGC: no baked promo/referral codes in any chosen clip; overlay y checked per clip against faces; font glyphs verified.
-10. After shipping: push the session's new learnings to this repo, same session. The rulebook only compounds if every build pays into it.
+9. UGC: no baked promo/referral codes or third-party brand handles in any chosen clip; overlay y checked per clip against faces; font glyphs verified.
+10. Real-world numbers on screen (ratings, review counts, order counts) re-verified against their live source at build time - brand stats drift and a stale counter in a receipts beat undermines the whole receipt.
+11. After shipping: push the session's new learnings to this repo, same session. The rulebook only compounds if every build pays into it.
