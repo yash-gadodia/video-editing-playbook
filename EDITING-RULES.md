@@ -63,7 +63,7 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 5. `[OBSERVED]` Receipts beat: show real numbers on screen (view counts, revenue, order counts) during the fastest-cut section.
 
 ## 7. UGC-sourced edits (compilations, testimonial reels)
-1. `[FIELD]` **QA every chosen clip's baked-in text for creator promo/referral codes BEFORE building.** Customer story reposts often carry the creator's personal discount code baked into the frame. Cropping rarely hides it cleanly - replace the clip instead.
+1. `[FIELD]` **QA every chosen clip's baked-in text for creator promo/referral codes AND third-party brand handles BEFORE building.** Customer story reposts often carry the creator's personal discount code, or a tag of another brand they feed alongside yours (e.g. a kibble-mix combo), baked into the frame. Either one can land on exactly the wrong beat of your script. Cropping rarely hides it cleanly - replace the clip instead.
 2. `[FIELD]` Visible usernames/story stickers in UGC are receipts, not clutter - keep them. They ARE the authenticity. Place your overlays around them.
 3. `[FIELD]` Caption y-position is per-clip, not global. A y that clears one clip's subject sits on the next clip's face. Split a caption into windows with different y per segment when the subject moves (and re-check every window against faces - a top-of-frame default is not an answer).
 4. `[FIELD]` Check your display font's glyph coverage before shipping stickers - symbol glyphs (e.g. ★) silently render as nothing in some display fonts. Spell it out ("4.8/5") or render the symbol as an emoji layer.
