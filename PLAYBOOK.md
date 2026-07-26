@@ -151,6 +151,7 @@ Whatever your tokens are: encode them ONCE as constants in the overlay scripts, 
 - Curate WITHOUT watching everything: extract one midpoint frame per candidate clip (ffmpeg `-ss mid -frames:v 1`), tile into a **contact sheet** (`-vf tile=6xN`), read the sheet, pick the strong shots.
 - Organize by folder: cook/kitchen process b-roll, pets eating, customer UGC, finished output. Check the process-footage folder FIRST for "how it's made" content.
 - The "money shot" may live in someone's phone Photos library, not the shared drive. Ask.
+- **The library is a round trip, not just a source.** Pull raw footage FROM it; when a video is finished, upload the final cut BACK to its finished-output folder (one dated folder per batch, e.g. `final/2026-07-26-reels/`) as part of wrapping the build, not as a someday chore. Finals only - no seg files, base renders, or vN iterations. Raw shoot takes go to the events folder, content-ready cuts to the content folder, so the next editor sources from the library instead of someone's laptop. After copying, verify byte sizes match and confirm the sync client is actually running - a copy into a dead sync folder uploads nothing.
 
 **Library limits (learned the hard way):**
 - A pets-eating folder can look big (23 clips) yet contain only ~4 distinct animals - sequential filenames usually mean one session, one pet. A montage-heavy reel exhausts distinct subjects fast; track subjects, not clip counts, and keep asking for fresh footage of NEW animals.
