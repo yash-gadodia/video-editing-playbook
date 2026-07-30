@@ -26,10 +26,12 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 4. `[CRAFT]` Visual change every 3-5s minimum even inside a single talking-head take: punch-in, caption pop, overlay animation, or location reset.
 5. `[OBSERVED]` Location/framing reset mid-monologue (same VO sentence, new backdrop) adds perceived pace without touching audio.
 6. `[CRAFT]` No dead frames: nothing on screen may sit unchanged longer than ~5s (talking head) / ~2s (b-roll montage). Kill breaths and pauses.
-7. `[OBSERVED]` Length serves the story: 13.5s and 68s both went 4M+. Cut to the story's natural end, then delete every second that doesn't earn its place. Ignore "optimal length" folklore.
+7. `[FIELD]` **Speech density is the cheapest lever you have.** On the best talking-head cut we have shipped, 22.1s of a 23.4s timeline is someone actually talking (95%). The 38.3s raw take contained a 10.1s dead-air gap where the founder stopped to read his notes, plus ~4.7s of inter-line pauses. All of it went. Raw takes are routinely 40-60% air; measure the ratio before you start decorating the edit.
+8. `[OBSERVED]` Length serves the story: 13.5s and 68s both went 4M+. Cut to the story's natural end, then delete every second that doesn't earn its place. Ignore "optimal length" folklore.
 
 ## 3. Cuts (what "clean" means)
-1. `[FIELD]` Cut ON word boundaries, never mid-breath. No residual frames from the previous clip. No sloppy audio overlap across cuts.
+1. `[FIELD]` **Drive cuts from a word-level transcript.** Whisper with word timestamps gives every word a start and end; pick in/out points from those numbers and a clipped consonant becomes structurally impossible. This also makes the edit reviewable as text before you render a single frame.
+2. `[FIELD]` Cut ON word boundaries, never mid-breath. No residual frames from the previous clip. No sloppy audio overlap across cuts.
 2. `[CRAFT]` J-cuts and L-cuts for VO flow: let the next line's audio start before the video cuts (J), or the video move on while the line finishes (L). Hard-cutting both together every time reads amateur.
 3. `[CRAFT]` Audio-first editing: place cuts on audio peaks/beats, not arbitrary frames. Extract the waveform, snap cuts to it.
 4. `[CRAFT]` Punch-in (5-10% scale jump) instead of a new angle to break up a single take; on the beat.
@@ -43,7 +45,11 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 5. `[OBSERVED]` Every enumerated word gets its own visual: VO says "2nd, 3rd, 4th draft" → screen shows drafts 2, 3, 4.
 6. `[CRAFT]` Kinetic typography synced to VO is the current standard; animate titles and CTAs, leave body captions simple.
 7. `[CRAFT]` ~85% watch muted: the video must work with sound OFF. Captions everywhere, visual proof over spoken claims.
-8. Safe zones (house rule, kept): nothing in top ~18% of frame; overlays never block faces.
+8. `[FIELD]` **Screenshot web proof at a MOBILE viewport, never desktop.** A desktop-width capture dropped into a 1080x1920 frame is an unreadable postage stamp. Shoot the page at ~430px CSS width (device scale 3) so it reflows tall, then crop a section: it fills the frame edge to edge with type you can actually read. This is the difference between a proof beat that works and one that is decoration.
+9. `[FIELD]` **Full-frame proof cutaways should be L-cuts.** Land the cutaway exactly on the words that describe it and let the speaker's audio run underneath unbroken. It reads as evidence appearing mid-sentence rather than as a slideshow interrupting the video. Two cutaways of ~2s each inside a 23s cut was the right dose.
+10. `[FIELD]` Sample the screenshot's own corner pixel for the card background colour. A near-white page crop on a brand-cream card leaves a visible rectangular seam that reads as sloppy compositing.
+11. `[FIELD]` **Clamp each subtitle's hide time to the next subtitle's show time.** Adjacent caption pills with independent fade-in/out windows will render on top of each other for a few frames. Mine did, and only a frame contact sheet caught it.
+12. Safe zones (house rule, kept): nothing in top ~18% of frame; overlays never block faces.
 
 ## 5. Sound
 1. `[CRAFT]` Ducking: music -12 to -18dB under speech; SFX -3 to -6dB under VO. Felt, not heard.
@@ -75,6 +81,15 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 ## 8. What we explicitly do NOT import (quarantined folklore)
 Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the marketing-blog versions of: trending-audio reach multipliers, micro-influencer superiority, optimal posting cadence, format-type preference stats, "67% more trusted" UGC numbers. The verified fundamentals remain: **watch time, completion, replays, shares** are the ranking signals; read first-party retention data, not listicles.
 
+## 9. Source prep (do this before a single cut)
+
+1. `[FIELD]` **Check the source colour space first.** `ffprobe -show_entries stream=color_transfer,color_primaries`. If it reports `arib-std-b67` (HLG) or `smpte2084` (PQ), the file is HDR and feeding it straight into ffmpeg will wreck the colour. Modern phones record HDR by default, so this is now the common case, not the exotic one.
+2. `[FIELD]` **Two ways to get HDR wrong, both shipped by me in one session.** (a) Decode it naively: ffmpeg ignores the tags, reads the HLG curve as if it were gamma and BT.2020 values as if BT.709, and you get a flat, washed-out, undersaturated image. It looks "fine but dull", which is exactly why it slips through review. (b) Hand-roll an HLG to BT.709 3D LUT: the classic bugs are applying the HLG OOTF at gamma 1.2 (that is the *1000-nit* system gamma) on top of the display gamma, which double-counts system gamma, plus a full BT.2020 to BT.709 matrix on content that is effectively near-709 gamut. Warm tungsten skin and walls go orange. The review verdict on that render: "why so red? looks weird like a bad filter".
+3. `[FIELD]` **The fix: let the OS tone map, do not reimplement it.** On macOS, pre-transcode to an SDR BT.709 master with AVFoundation, then run the entire ffmpeg pipeline on that master. `templates/tosdr.swift` does it in about 20 seconds for 38s of 4K, keeps audio and exact timing, and bakes in the rotation so there is no display-matrix side data to handle downstream. The usual `zscale=t=linear,tonemap,zscale=p=bt709` recipe is unavailable on ffmpeg builds compiled without libzimg, and that absence is precisely what tempts you into the hand-rolled LUT. Do not take the bait.
+4. `[FIELD]` **Get a ground-truth reference frame before judging any grade.** `AVAssetImageGenerator` returns a system-tone-mapped still, the exact thing the OS video player shows. Render your version beside it and LOOK. Do not trust "mine looks richer than the raw decode" as evidence of correctness; richer was the failure mode. `templates/ref_frame.swift`.
+5. `[FIELD]` **A numeric fit that bottoms out at the edge of your parameter grid is telling you the approach is wrong, not that the parameters need tuning.** I swept OOTF gamma, primaries matrix, exposure and desaturation against the reference; the best fit still had ~27/255 mean absolute error and kept pushing toward the grid boundary. That was the signal to stop tuning and delegate the transform.
+6. `[CRAFT]` Transcribe the raw take at word level before planning cuts. The transcript, not the waveform, is the edit decision list for anything with speech.
+
 ## The pre-render gate (run before every render)
 1. Hook: number/loss/confession/contradiction present? Stranger-stops-scrolling test passed?
 2. Premise: would this be interesting with ZERO editing? If no, fix the premise first.
@@ -86,4 +101,6 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 8. House QA (from PLAYBOOK.md): no repeated footage, stills static, real labels, coverage/frozen-frame/chopped-word checks.
 9. UGC: no baked promo/referral codes or third-party brand handles in any chosen clip; overlay y checked per clip against faces; font glyphs verified.
 10. Real-world numbers on screen (ratings, review counts, order counts) re-verified against their live source at build time - brand stats drift and a stale counter in a receipts beat undermines the whole receipt.
-11. After shipping: push the session's new learnings to this repo, same session. The rulebook only compounds if every build pays into it.
+11. Source colour: if the raw file is HDR (`arib-std-b67` / `smpte2084`), was it converted through the OS tone mapper first? Was the render compared against a system reference still?
+12. Speech density: what fraction of the timeline is someone talking? Under ~90% on a talking-head cut means there is still air to remove.
+13. After shipping: push the session's new learnings to this repo, same session. The rulebook only compounds if every build pays into it.

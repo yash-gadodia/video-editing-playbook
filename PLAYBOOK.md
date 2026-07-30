@@ -36,6 +36,9 @@ The go-to for explainer/product/tech content. Write a tight ~28-30s VO script on
 
 ## 2. The end-to-end pipeline (the recipe)
 
+### Step 0 - Normalise the source (HDR footage)
+`ffprobe -show_entries stream=color_transfer` the raw camera file. `arib-std-b67` (HLG) or `smpte2084` (PQ) means HDR, which modern phones record by default. Run `templates/tosdr.swift` to produce an SDR BT.709 master via AVFoundation and point the whole build at that. Do **not** put `lut3d` or hand-written colour maths in the ffmpeg chain: a naive decode comes out washed out, and a hand-rolled HLG LUT comes out orange (double system gamma plus an over-wide primaries matrix). Grab reference stills with `templates/ref_frame.swift` and compare before trusting any grade. Full reasoning in EDITING-RULES.md section 9.
+
 ### Step 1 - Script (formats A/D) or curate (formats B/C)
 - **Format D (preferred for autopilot):** write a ~28-30s VO script, ONE topic, problem-first, brand voice. Tell the founder exactly which 5-6 screenshots/clips to send (a shotlist).
 - **Format A/B:** transcribe the raw takes, pick the story arc from the transcript.
@@ -55,9 +58,19 @@ Our ffmpeg build has **no libass, no drawtext, no freetype**. So *every* caption
 - **Hook card** - eyebrow + 2-line headline (display font, brand fill + stroke).
 - **Word-timed captions** - 3-4 word chunks, semibold, brand fill + stroke, keyword words in the accent color. Clamp each caption `end = min(end, next.start - 0.02)` so two never overlap (overlap = garbled double-text).
 - **B-roll cutaways** - real photos cover-cropped to 1080x1920; screenshots as rounded cards on a brand bg + label. **Pixelate PII** (downscale 14x then back up).
-- **Emoji pops** - Apple Color Emoji via PIL (size MUST be 160 + `embedded_color=True`, then resize ~200px, rotate ±6-10°). ~8-10 per 60s, each tied to a spoken beat, clear of faces + captions.
+- **Emoji pops** - Apple Color Emoji via PIL (size MUST be 160 + `embedded_color=True`, then resize ~200px, rotate ±6-10°). PIL only accepts the font's bitmap strikes: `[20, 26, 32, 40, 48, 52, 64, 96, 160]`, anything else raises `OSError: invalid pixel size`. When resizing after `crop(getbbox())`, **preserve aspect ratio** or wide glyphs like the speech-bubble render visibly squashed. ~8-10 per 60s, each tied to a spoken beat, clear of faces + captions.
 - **Logo badge** - the brand mark on a filled disc (reads on any bg), in a corner.
 - **End card** - logo wordmark + "Follow our journey" + handle, xfade in over the last 0.45s.
+
+### Step 4b - Alternative: one RGBA frame sequence instead of a filter chain
+For a short piece with many overlay windows, chaining ~45 `overlay ... enable='between(t,a,b)'` filters gets unreadable and locks you out of per-frame motion. Instead render **one full-length RGBA PNG sequence** in PIL (composite every sticker, subtitle, cutaway and badge per frame), encode it to `qtrle`, and do a **single** overlay against the base cut:
+
+```
+ffmpeg -framerate 30 -i ov/f%05d.png -c:v qtrle -pix_fmt argb overlay.mov
+ffmpeg -i base.mp4 -i overlay.mov -filter_complex "[0:v][1:v]overlay=0:0:format=auto,format=yuv420p[v]" ...
+```
+
+Slide-ups, pop-ins and fades become plain Python arithmetic on `t`, and the whole compose is one filter. 702 frames of 1080x1920 rendered and muxed in about 1m45s. Worth it below ~60s of output; above that the PNG sequence gets heavy and the filter-graph approach wins.
 
 ### Step 5 - Render (ffmpeg filter graph)
 - **Layer order: cutaways first, captions ON TOP, watermark last.** (Captions under photos = wasted render.)
