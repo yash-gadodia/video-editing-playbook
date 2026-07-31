@@ -19,6 +19,8 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 6. `[CRAFT]` Fragment the first sentence - cut to the next shot mid-thought so the brain follows the incomplete pattern.
 7. `[FIELD]` **No jargon in the hook.** If anyone has to ask what a word means, the scroll is already gone. Technical terms live on receipt surfaces (site screenshots, tables) where they signal expertise; the hook gets playground words ("cats NEED meat. period." beats "obligate carnivores"). Field-tested: the founder himself asked what the fancy word meant.
 
+8. `[OBSERVED]` **Average play time on our reels is 4 to 15 seconds against runtimes of 38 to 76 seconds.** Measured across a full account in Meta Business Suite, not inferred. Whatever the piece is *for* has to happen inside the first ten seconds; end cards, CTAs and pay-offs placed at 0:30 are being seen by almost nobody. Front-load the pay-off and treat the tail as a bonus for the few who stay.
+
 ## 2. Pacing
 1. `[OBSERVED]` VO-driven reels: average shot 1.2-1.5s (measured: 1.23-1.35s across kaiandjia's product reels; our old default of ~2.5s is too slow).
 2. `[OBSERVED]` **Cluster your cuts.** Pace is rhythm, not a constant: the gabrieljudah reel machine-guns 8 cuts in 6s on the receipts beat, then holds 3-4s shots during the one key explanation. Fast where evidence stacks, slow where the idea lands.
@@ -70,6 +72,13 @@ The mechanical rules for cutting a short-form video, synthesized 2026-07 from: f
 3. `[CRAFT]` Mini open-loops in the body ("I'll come back to this"); attention reset every 20-30s (twist, cutaway, sound spike).
 4. `[CRAFT]` Loop-back endings (last shot flows into the first) inflate completion via replays.
 5. `[OBSERVED]` Receipts beat: show real numbers on screen (view counts, revenue, order counts) during the fastest-cut section.
+
+## 6b. What actually made the difference (measured, not felt)
+
+1. `[OBSERVED]` **Shares separate a hit from a flop, and nothing else comes close.** Across one account's recent output, the single reel that reached ~3x follower count took 18 shares and 227 interactions; everything the brand produced itself took 0 to 2 shares and 3 to 16 interactions. Shares are a confirmed ranking signal, so this is a mechanism and not a mood. Before rendering, ask the concrete question: who forwards this to whom, and what does sending it say about the sender? If there is no answer, the edit will not save it.
+2. `[OBSERVED]` **Carousels are the save format; reels are the reach format.** A static carousel with under 1,000 views collected 6 shares and 5 saves, more than any reel on the account. Put reference material (numbers, comparisons, receipts) in carousels and motion-dependent storytelling in reels, rather than forcing everything into video.
+3. `[OBSERVED]` **Reach does not convert to follows on its own.** A reel at ~3x follower count produced one follow. If follower growth is the goal, the ask has to be built into the piece; volume alone does not do it.
+4. `[FIELD]` **Pull the numbers from the platform's content table, not the public grid.** Logged-out grid counts were 35% low against the same post's logged-in figure, and the grid hides shares, saves, watch time and average play time entirely. The deeper columns are where the lesson is.
 
 ## 7. UGC-sourced edits (compilations, testimonial reels)
 1. `[FIELD]` **QA every chosen clip's baked-in text for creator promo/referral codes AND third-party brand handles BEFORE building.** Customer story reposts often carry the creator's personal discount code, or a tag of another brand they feed alongside yours (e.g. a kibble-mix combo), baked into the frame. Either one can land on exactly the wrong beat of your script. Cropping rarely hides it cleanly - replace the clip instead.

@@ -77,6 +77,26 @@ Three things fall out of that table, and none of them are about editing skill:
 
 **Caveats, because this is one account and grid view counts, not Insights.** Views are not reach, we have no retention or share data here, nothing was controlled, and n=24 with two outliers is a small sample. Read it as a prior for what to try next, not as proof.
 
+
+### Update: the deeper columns (same account, Meta Business Suite, 2026-07-31)
+
+Grid views told us which posts travelled. The content table told us why.
+
+| Post | Views | Interactions | Shares | Saves | Follows |
+|---|---|---|---|---|---|
+| Creator collab (their pet, their caption, published as a collab) | 7,651 | 227 | **18** | 0 | 1 |
+| Partner promo post | 1,000 | 24 | 0 | 5 | 2 |
+| Static carousel (open P&L) | 976 | 16 | **6** | **5** | 0 |
+| Brand-produced launch reel | 652 | 6 | 2 | 0 | 0 |
+| Founder interview collab | 557 | 16 | 1 | 0 | 0 |
+| Long founder community cut | 447 | 4 | 0 | 0 | 0 |
+
+- **Shares are the discriminator.** 18 on the winner, 0-2 on everything the brand made itself.
+- **Saves live on carousels**, not reels, even at a fraction of the views.
+- **Follows are ~0 everywhere**, including the winner. Reach does not become audience by itself.
+- **Average play time was 4-15s against 38-76s runtimes.** Front-load or be unseen.
+- Logged-out grid counts ran ~35% below the logged-in figure for the same post. Always read from the owner's session.
+
 ## What this means for a small quality-first brand
 
 1. **The retention-data loop is the whole game.** No external source can tell you which of your formats converts viewers to followers. IG Insights can: it reports follows per post. Tag every reel by format (myth-bust / founder story / BTS / eating / testimonial) and let 10-15 posts of first-party data answer what no blog can.
