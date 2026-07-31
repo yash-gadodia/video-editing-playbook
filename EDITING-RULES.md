@@ -90,6 +90,17 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 5. `[FIELD]` **A numeric fit that bottoms out at the edge of your parameter grid is telling you the approach is wrong, not that the parameters need tuning.** I swept OOTF gamma, primaries matrix, exposure and desaturation against the reference; the best fit still had ~27/255 mean absolute error and kept pushing toward the grid boundary. That was the signal to stop tuning and delegate the transform.
 6. `[CRAFT]` Transcribe the raw take at word level before planning cuts. The transcript, not the waveform, is the edit decision list for anything with speech.
 
+## 10. Interview & collab formats (the highest-leverage shape we have found)
+
+1. `[OBSERVED]` **Stacked split-screen interview.** Guest fills the top pane, host the bottom, both talking heads, no empty frame. The listener's face is doing real work: it gives the scroller a reaction shot and a reason to stay. Observed on a collab interview of our founder by a pet-media account; it is the same shape used across the interview-clip economy.
+2. `[OBSERVED]` **Yellow word-by-word captions at the seam between the two panes.** High-contrast yellow reads on skin, walls and clothing alike, which is why it is the default in high-retention interview clips. Worth A/B testing against a brand-coloured caption, because brand colours are chosen to look correct, not to survive a 4-inch screen at arm's length.
+3. `[FIELD]` **One long interview is a series machine, not one video.** A 7-minute founder interview cut at question boundaries yielded 10 self-contained clips (0:13 to 1:14 each). Each answer already opens with its own question, which IS the hook. Film once, ship for weeks.
+4. `[FIELD]` **Question design decides whether the answers are usable.** The questions that produced shippable clips all forced a confession or a contradiction: "if you started over, what would you change", "what was the biggest problem", "how did you get your first 100 customers". The ones that produced flat answers were positional ("how do you think about competitors"). Write questions that can only be answered with a loss, a number or an admission, per rule 1.2.
+5. `[FIELD]` **Answers that break the expected script travel furthest.** The strongest lines in our own interview were the ones that refused the premise: "I don't think the business has actually taken off, we're just getting started", and naming the biggest mistake as something the founder chose to do. Prompt for those explicitly, they rarely arrive unprompted.
+6. `[CRAFT]` **Plant an open loop inside the interview.** Two separate answers teased an upcoming transparency drop ("stay tuned, we are publishing every single dollar"). That converts a one-off interview into an on-ramp for the next launch.
+7. `[FIELD]` **Always publish partner content as a collab post**, not a repost. It lands on both grids and both follower feeds. In our own data, collab posts run 1.5 to 2.6x median while brand-owned announcements run at or below it.
+8. `[FIELD]` **Ship the raw interview to the partner as frame-accurate clips plus a word-level transcript and a shotlist.** They edit faster, they credit accurately, and you keep an identical set to cut your own versions from later.
+
 ## The pre-render gate (run before every render)
 1. Hook: number/loss/confession/contradiction present? Stranger-stops-scrolling test passed?
 2. Premise: would this be interesting with ZERO editing? If no, fix the premise first.

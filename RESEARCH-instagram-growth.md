@@ -53,6 +53,30 @@ All of the following were killed in verification (vote shown as confirm-refute):
 
 Note the nuance on the shares/saves rows: what died here is the *marketing-blog version* of those claims (unsourced, overstated). The prior research verified the underlying fundamental (watch time / completion / replays / shares as ranking signals) from platform-official docs. The fundamental stands; the blog embellishments don't.
 
+## First-party evidence (n=24 reels, one account, 2026-07-31)
+
+The research above concludes that only your own retention data is trustworthy. So here is ours, published for the same reason we publish everything else.
+
+**Account: 2,787 followers, 24 reels. Median 606 views, mean 1,426.** The mean sits 2.4x above the median, which is the whole story: two posts carry the account.
+
+| Format | Views | vs median |
+|---|---|---|
+| Animal face filling frame + curiosity question ("how fast can cats hear this?") | 9,315 / 7,640 | 13-15x |
+| Public response to criticism ("we got called out this week, here is our honest, unedited response") | 3,817 | 6x |
+| Collab post with another brand's audience | 1,557 / 984 | 1.6-2.6x |
+| Myth-bust explainer, calm register | 480-1,132 | ~1-1.9x |
+| Founder announcement (a considered, well-produced launch film) | 650 | 1.1x |
+| Calm nutrition explainer | 261 | 0.4x |
+| Event card, booth map, product pack shot | 140-392 | floor |
+
+Three things fall out of that table, and none of them are about editing skill:
+
+1. **Format dominates production value.** The two winners are phone close-ups of one cat with a question typed over them. The most produced pieces on the account sit at median. If the shape is wrong, craft does not rescue it.
+2. **Conflict outperforms teaching by roughly 6x.** The same facts delivered as a response to an attack travelled; delivered as a lesson, they did not. This is consistent with rule 1.2 (a hook needs a number, a loss, a confession or a contradiction) and suggests the rule applies to the *premise*, not just the first line.
+3. **Announcements are the floor.** Anything that is fundamentally a card, a date or a product shot lands at 140-450 regardless of how well it is made. Post them as a record, and do not count them as reach.
+
+**Caveats, because this is one account and grid view counts, not Insights.** Views are not reach, we have no retention or share data here, nothing was controlled, and n=24 with two outliers is a small sample. Read it as a prior for what to try next, not as proof.
+
 ## What this means for a small quality-first brand
 
 1. **The retention-data loop is the whole game.** No external source can tell you which of your formats converts viewers to followers. IG Insights can: it reports follows per post. Tag every reel by format (myth-bust / founder story / BTS / eating / testimonial) and let 10-15 posts of first-party data answer what no blog can.
