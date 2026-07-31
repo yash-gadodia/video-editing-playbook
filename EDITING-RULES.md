@@ -110,6 +110,33 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 7. `[FIELD]` **Always publish partner content as a collab post**, not a repost. It lands on both grids and both follower feeds. In our own data, collab posts run 1.5 to 2.6x median while brand-owned announcements run at or below it.
 8. `[FIELD]` **Ship the raw interview to the partner as frame-accurate clips plus a word-level transcript and a shotlist.** They edit faster, they credit accurately, and you keep an identical set to cut your own versions from later.
 
+## 11. Showing a real document (redaction is a format, not a chore)
+
+1. `[CRAFT]` **The redaction IS the hook.** A blurred real document signals "this exists and I am choosing what to withhold" in a way a clean designed graphic cannot fake. Withholding reads as more honest than showing nothing, and more credible than a mockup. The reaction to our own build of this was the strongest we have had.
+2. `[FIELD]` **Redact default-deny: blur the whole frame, then restore only the regions you have explicitly cleared.** The intuitive way round (list the regions to blur) leaks. A first pass over ten spreadsheet tabs missed the summary rows, because they sat outside every rectangle we had thought to name.
+3. `[CRAFT]` **Keep the labels sharp and kill the values.** Row and column headings readable, figures blurred. The viewer sees *what* is tracked without the numbers, and the surviving structure is exactly what makes it read as genuine rather than staged.
+4. `[CRAFT]` **Number the versions.** A montage of near-identical screenshots is boring. The same montage labelled V1 through V7, each with one line on what that version tried, becomes a progress narrative with a destination. The label carries the meaning, so individual cells never need to be legible.
+5. `[FIELD]` **Read the margins of every screenshot before it ships.** Working documents carry things the story does not need: third-party ad spend, vendor and contractor names, competitor names. One tab in our own set had all three parked in unused columns. Blur by region, not by data type.
+6. `[CRAFT]` **End on the one thing you ARE publishing.** After a run of redactions, the single unblurred artefact is the emotional pay-off.
+
+## 12. Rendering integrity (the failures that ship silently)
+
+1. `[FIELD]` **Never `zoompan` a static card.** It rounds its crop offset to whole INPUT pixels each frame, so a slow push-in on a still oscillates about a pixel and reads as shake. Supersampling the source 2x halves it but does not remove it (measured: 5 one-pixel reversals across 43 frames). Animate opacity instead: `scale=W:H:flags=lanczos,fps=30,setsar=1,fade=t=in:st=0:d=0.30` over a `-loop 1 -t DUR` still. Alpha cannot quantise position, so shake becomes structurally impossible rather than merely reduced.
+2. `[FIELD]` **`zoompan`'s `d=` counts output frames PER INPUT FRAME.** Hand it a looped still and every input frame spawns a full `d=` run, so each card silently becomes minutes long and `-shortest` truncates the timeline to the first one. Feed exactly one image, no loop, and cap with `-frames:v N`.
+3. `[FIELD]` **Join segments with the concat FILTER, not the concat demuxer.** The demuxer assumes every input already shares codec parameters and silently mistimes them when they do not. A clip that inherited 44100 Hz from a phone source, joined to segments encoded at 48000 Hz, held its last frame for ~1s at the seam. The filter re-normalises fps, scale, sample rate and channel layout per input, so the whole class of bug disappears.
+4. `[FIELD]` **Pin `-ar` and `-ac` on every intermediate encode.** Sample rate is inherited from the source when unset, so segments built at different moments drift apart with no warning. Decide one canonical spec (resolution, fps, pixel format, sample rate, channel layout) and force it on every intermediate.
+5. `[CRAFT]` **Assert duration after every join.** Compare the output against the sum of its parts and fail loudly past a small tolerance. The freeze above was sitting in the numbers (10.97s expected, 11.97s actual) long before anyone saw it on screen.
+6. `[FIELD]` **Verify motion numerically, never by eye.** For frozen frames, decode at ~10fps and flag runs where consecutive frames differ by near zero. For jitter, cross-correlate consecutive frames: try a shift of -1, 0 and +1 px per pair and check which alignment minimises the difference. All zeros means genuinely static. Edge-threshold tests give false positives on anti-aliased curves, which is how a card that is provably static can still look like it is moving.
+7. `[FIELD]` **Display fonts carry no emoji glyphs, and PIL drops them silently** - no tofu box, just nothing where the emoji was. Either omit emoji from rendered cards or draw them from the system colour-emoji font with `embedded_color=True`, which accepts only fixed strike sizes. Emoji in the post caption are unaffected. A grey paw on a dark brand colour reads as a smudge regardless; let the logo carry it.
+8. `[CRAFT]` **Auto-fit caption text to a safe width.** A point size that fits one line will overflow the frame on the next. Shrink until it fits, then wrap.
+
+## 13. Ending a video
+
+1. `[FIELD]` **Every cut ships with a closing CTA card, memes included.** Roughly 1.5 to 2s: logo, a follow line, the site. A video that simply stops on its last content frame feels abrupt and wastes the attention it earned.
+2. `[CRAFT]` **Let the bed carry through the card.** Cutting audio dead at the seam is what actually makes an ending feel broken, more than the visual.
+3. `[FIELD]` **The CTA is closure, not the mechanism.** Rule 1.8 measured that almost nobody reaches the tail, so the card is for the few who stay. Never park the pay-off there, and never let "there is a CTA at the end" substitute for building the ask into the first ten seconds.
+4. `[CRAFT]` **Soft CTA only.** Follow, or the site. Codes and hard offers on an end card turn a shareable piece into an ad, which costs more reach than the offer wins.
+
 ## The pre-render gate (run before every render)
 1. Hook: number/loss/confession/contradiction present? Stranger-stops-scrolling test passed?
 2. Premise: would this be interesting with ZERO editing? If no, fix the premise first.
@@ -124,3 +151,6 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 11. Source colour: if the raw file is HDR (`arib-std-b67` / `smpte2084`), was it converted through the OS tone mapper first? Was the render compared against a system reference still?
 12. Speech density: what fraction of the timeline is someone talking? Under ~90% on a talking-head cut means there is still air to remove.
 13. After shipping: push the session's new learnings to this repo, same session. The rulebook only compounds if every build pays into it.
+14. Rendering integrity: duration asserted against the sum of parts after every join? Frozen-frame scan run over the whole timeline? Any move on a still proven static by cross-correlation rather than by watching it?
+15. Ending: CTA card present, bed carrying through it, and the ask also made inside the first ten seconds?
+16. Redaction (if any real document is on screen): built default-deny, margins of every screenshot read for third-party names and spend, labels sharp and values killed?
