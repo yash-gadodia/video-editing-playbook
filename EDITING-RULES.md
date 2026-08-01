@@ -184,7 +184,7 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 10. Real-world numbers on screen (ratings, review counts, order counts) re-verified against their live source at build time - brand stats drift and a stale counter in a receipts beat undermines the whole receipt.
 11. Source colour: if the raw file is HDR (`arib-std-b67` / `smpte2084`), was it converted through the OS tone mapper first? Was the render compared against a system reference still?
 12. Speech density: what fraction of the timeline is someone talking? Under ~90% on a talking-head cut means there is still air to remove.
-13. After shipping: push the session's new learnings to this repo, same session. The rulebook only compounds if every build pays into it.
+13. After shipping, write the session's learnings down TWICE, same session, before handoff: the project-specific version (real names, paths, open questions) into your own persistent notes, and the generalised version here, sanitized. They are different documents for different readers - copying one into the other loses either the specifics or the transferability. The rulebook only compounds if every build pays into it.
 14. Rendering integrity: frame COUNT asserted against the sum of parts after every join (not duration, which a tolerance will wave through)? Frozen-frame scan run over the whole timeline? Any move on a still proven static by cross-correlation rather than by watching it?
 15. Ending: CTA card present, bed carrying through it, and the ask also made inside the first ten seconds?
 16. Redaction (if any real document is on screen): built default-deny, margins of every screenshot read for third-party names and spend, labels sharp and values killed?
