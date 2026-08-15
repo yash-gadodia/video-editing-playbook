@@ -32,6 +32,34 @@ Curated library clips + Gen-Z brand-sticker captions + emoji + beat-synced cuts 
 ### D. BTS / tech / "how we built X" (scripted-VO + screenshots) - **the most automatable**
 The go-to for explainer/product/tech content. Write a tight ~28-30s VO script on ONE topic, the VO is generated (or recorded), the founder sends 5-6 screenshots mapped to script beats, the agent edits full-frame cards + word-timed captions. No old footage to fight, no lip-sync to verify → fully automatable end to end. **This is the format to lean on for autopilot.**
 
+### E. Founder cutout explainer (the "green screen" reel) - **the house announcement format**
+The style of late_delivery_v1 and the Aug-2026 price-rise reel. A talking-head take is rembg-cut
+out and composited over brand cards with receipt evidence, so the founder is ON SCREEN for the
+whole piece while the cards carry the argument. This is a format spec, not a garnish - when the
+founder asks for "green screen", this whole checklist applies:
+
+1. **The cutout is present from FRAME ONE and on every full-frame card beat.** A card without
+   the founder is the exception you justify (e.g. a price table that needs the room), not the
+   default. Shipping card-only beats and adding the cutout "later" is the regression that got
+   this section written.
+2. **One message block per card.** A card carries EITHER a sticker headline OR a receipt crop
+   (plus the word captions), never banner + sticker + receipt stacked. If the pinned context
+   banner is still up, it must end before a sticker-led card starts. Receipts that repeat on a
+   later beat appear once, at the later beat.
+3. **Cutout geometry:** person bottom-anchored, scale ~0.82 solo / ~0.72 with one receipt /
+   ~0.55-0.62 under tall content; white (on cream) or cream (on teal) outline via dilated mask;
+   content laid out in the band ABOVE the head with measured clearance, then captions at y~1400
+   land on the chest. Compute the head-top y from the scale before placing anything.
+4. **Audio bed + SFX are part of the format, not optional polish.** Cleared CC-BY bed at
+   0.06-0.08 under speech (lift ~0.16 over silent montage), synthesized/library SFX at 0.25-0.45
+   on beat starts (hook boom, card whooshes/dings, CTA riser, montage cha-ching), caption credit
+   for the CC-BY track. If the audio library is missing, REBUILDING IT IS PART OF THE JOB -
+   "assets unavailable" is not a reason to ship a silent master when the rule says bed it.
+5. **Receipt crops ship whole.** A crop that amputates a sentence of the receipt reads as
+   sloppier than no receipt. Verify every crop's last text line survives at render size.
+6. **Adjacent price/number pairs get measured, not eyeballed.** Strikethrough-old next to new
+   collided once already: compute both text widths at the final font size and assert the gap.
+
 ---
 
 ## 2. The end-to-end pipeline (the recipe)
