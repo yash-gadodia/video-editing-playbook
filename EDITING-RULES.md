@@ -290,7 +290,73 @@ Building each beat as a larger still and cropping a moving window out of it is a
 6. `[FIELD]` **A silent source clip run through an `-af` chain produces a segment with NO audio stream, and the concat filter then fails cryptically** ("Stream specifier ':a' matches no streams"). Probe `has_audio` per clip and map an anullsrc when absent - same trap as the two-audio-tracks bug, opposite direction.
 7. `[FIELD]` **A shipping label in your own founder's hands is a live tracking QR plus a customer address - same class as a booth payment QR.** A "carrying boxes" b-roll beat shipped to QA with a parcel label facing camera; the QR decoded (at 1x, no upscale needed) to a real consignment tracking number. Cheapest fix was rule 11.12's: a different window of the same clip with the label facing away, which also happened to be the better shot (the cold-chain truck in frame). Scan every frame where a parcel, envelope or label is legible, not just event signage.
 8. `[FIELD]` **Search talent by NAME across the whole library before concluding footage doesn't exist - rule 3's filename trap has a folder-shaped twin.** "No Lola clips" was concluded after surveying two eating-clips folders; the library had an entire `04_talent/Lola/Feeding Lola POV` shoot. The named subject of a line gets a library-wide name search (folder names, not just file names) before any stand-in is cast, and the founder's "it's definitely in the NAS" is a search directive, not a hope.
-9. `[FIELD]` **A standing names dictionary is part of the transcript-fixes layer, and it persists across videos.** Whisper hears "Nic" as "Nick" every single take, and the wrong spelling reached burned-in captions twice in one day because the fix map lived in one build script instead of everywhere. Proper-noun corrections (people, brands, pets) belong in a shared fixes list applied by every build, and each new correction the founder gives gets added the same day. Current list: Nick->Nic, cable->kibble, fuzziest->fussiest.
+9. `[FIELD]` **A standing names dictionary is part of the transcript-fixes layer, and it persists across videos.** Whisper hears "Nic" as "Nick" every single take, and the wrong spelling reached burned-in captions twice in one day because the fix map lived in one build script instead of everywhere. Proper-noun corrections (people, brands, pets) belong in a shared fixes list applied by every build, and each new correction the founder gives gets added the same day. Current list: Nick->Nic, cable->kibble, fuzziest->fussiest, pet->pack (when the subject is a parcel/delivery - see section 18.4).
 10. `[FIELD]` **A small intrusion at a frame edge (a finger, a cable, a foot) is a crop, not a reshoot.** The founder liked the clip and hated the finger. Zoom ~1.15-1.2x with the crop anchored AWAY from the intrusion edge (crop y=0 to cut the bottom) and the clip survives. Check the re-crop against faces and the safe zones like any other frame change.
 11. `[FIELD]` **Montage clips with noisy room audio get MUTED under the bed, not ducked.** A 0.35-gain "diegetic" track that is actually aircon and handling noise reads as static (-35dB of hiss at 44s got flagged within minutes). Rule 5.8 already says measure before promising ASMR; the corollary is that when the measurement says noise, the clip contributes zero audio and the bed carries the moment.
 12. `[FIELD]` **When the founder says "we talked about this before", the correction was taught and never written down - that is a process failure, not a memory failure.** Chat sessions die; the repo survives. Any correction given twice means the first occurrence was not paid into the rulebook the same day it happened. The self-learning loop (§9 of PLAYBOOK.md) is the contract: write it down BEFORE handing off the video, not after the next session relearns it.
+
+## 18. Session additions - 2026-08-25 (event founder interview, locked-off two-shot)
+
+1. `[FIELD]` **Attribute speakers by measuring mouth motion, not by guessing from register.** A
+   two-hander interview needs to know who said what before a single cut is planned - it decides
+   which single you punch into, which quote the caption attributes, and whether the post caption's
+   "he said" is true (rule 7.13's twin, for audio instead of wardrobe). Crop a mouth-region ROI per
+   speaker out of the master, decode at 10fps greyscale, take the mean absolute inter-frame diff,
+   normalise each channel and compare per transcript segment. On a 193s two-founder take this
+   produced two clean contiguous blocks that matched the handover line in the take ("Nic?" / "yeah,
+   you can start first") with no ambiguity. It costs one ffmpeg pass per speaker and removes the
+   entire class of mis-attributed quote. Interjection segments under ~1.5s come back with tiny
+   margins - treat those as unresolved rather than as findings.
+2. `[FIELD]` **A 4K vertical master makes the punch-in free, so cut video per SHOT and audio per BEAT.**
+   Shooting 2160x3840 means a 1080x1920 "single" is a 1:1 native crop, not an upscale - one locked-off
+   two-shot yields wide, two-shot, and a tight single of each speaker at full resolution. Build the
+   two streams on different grids: audio concatenated per BEAT (one continuous run of speech, so no
+   join ever lands inside a sentence and the click/chopped-word class cannot occur) and video
+   concatenated per SHOT (reframes that change every 2-3s inside that continuous audio). An assert
+   that the two timelines agree to the frame is what keeps them honest. This gets rule 2.4's "visual
+   change every 3-5s" for free on a single static camera.
+3. `[FIELD]` **A badge position that clears every face in a single clears none in a two-shot.** The
+   house top-left badge at y~370 sat squarely on the frame-left founder's chin the moment the cut
+   pulled out to hold both people, because a framing containing two seated subjects puts a head in
+   both top corners. Moving it to top-right just swaps which face it lands on. Derive badge windows
+   from the shot list - show it only over single framings, hide it over any framing that holds more
+   than one subject - rather than picking one coordinate and hoping. Same logic as hiding it over a
+   full-frame proof card.
+4. `[FIELD]` **Whisper hears "pack" as "pet" in a pet-food interview, and context makes the error
+   invisible.** "If your pet comes slightly defrosted" reads as a plausible sentence in a transcript
+   about animals, which is exactly why it survives review; four isolated decodes (two speeds x two
+   temperatures) all returned "pack". The full-take pass is the optimistic one (rule 9.10b) and a
+   domain vocabulary the decoder half-knows is where it leans hardest. Any noun that is load-bearing
+   AND has a near-homophone inside the brand's own vocabulary gets the isolated decode before it is
+   burned in. Added to the standing fixes list.
+5. `[FIELD]` **The master re-transcribe diff is nearly free on an overlay-only re-render - prove the
+   audio hash instead of re-running Whisper.** Caption legibility, badge windows and text-case fixes
+   all re-render graphics over an untouched audio chain. Decoding both renders to raw PCM and
+   comparing a hash takes about a second, carries the earlier zero-deletes verification over intact,
+   and (per rule 12.16) tells you immediately if a "graphics-only" change quietly was not.
+6. `[FIELD]` **A chunker that caps at N words butchers phrases; break at the widest gap instead.** A
+   hard 5-word cap produced "We actually let you keep" / "it and pass it to" - breaks mid-phrase that
+   read as a transcription bug. Chunk in two passes: hard breaks first (beat change, terminal
+   punctuation, pause > 0.30s), then recursively split any run still over the cap **at its widest
+   internal gap nearest the middle**. Then absorb any surviving one-word or sub-0.34s chunk into its
+   neighbour in the same beat - otherwise the short-chunk filter silently drops a spoken word from
+   the captions ("the dog doesn't like" / "you have leftover packs", with the "it" gone).
+7. `[FIELD]` **Capitalise the first SURVIVING caption of each beat, after filtering, not before.** A
+   0.12s "I mean," opened a beat, got capitalised, and was then dropped by the minimum-duration
+   filter - leaving the beat opening on a lowercase "the". Any pass that removes chunks invalidates a
+   cosmetic pass that ran before it.
+8. `[FIELD]` **Cream captions with a brand-colour stroke disappear on event footage.** The house
+   caption recipe is tuned for kitchen and studio backgrounds; a convention hall gives you white
+   tees, pale banners and a bright metal fence, and 66px cream-on-teal-stroke read as thin grey
+   smudge at thumbnail size. A filled teal pill at ~84% opacity behind 80px text fixed it in one
+   render. Judge caption contrast against the actual background of the actual shots, not against the
+   palette.
+9. `[FIELD]` **`ls` says gigabytes, `du` says 0B, and the network tells you why.** Rule 12.15 covers
+   eviction; the sibling failure is a sync client reaching the NAS over a *relay* instead of the LAN.
+   The tell is the local address: a 172.20.10.x client IP is an iPhone hotspot, and the transfer ran
+   at 158 KB/s (36GB = 64 hours) against 16 MB/s once the machine was back on wifi - a 100x
+   difference that no amount of parallelism fixes. Measure throughput with two `netstat -ib` samples
+   before designing the session around a hydration plan, and check the client IP when it is slow.
+   Parallel `cat` across five large files during a network switch also returns "Operation timed out"
+   with a zero exit from the loop, so wrap hydration in a retry and re-check `du` afterwards rather
+   than trusting the loop finished.
