@@ -222,6 +222,17 @@ Our adversarial research (200+ agents, ~190 claims, 6 survivors) killed the mark
 
 ## 14. Covers and thumbnails
 
+0. `[FIELD]` **A purpose-built cover is part of the deliverable, on EVERY platform that
+   accepts one. It is never an open item you offer to do later.** Shipping a scheduled
+   video with "cover still to do" attached wastes the edit, because the cover is the only
+   thing that decides whether the piece gets tapped at all. Build one per aspect ratio,
+   composed from the master rather than grabbed from the delivery render (rule 11.10), and
+   set it at schedule time: Instagram `coverImageUrl` at 1080x1920, YouTube `thumbnailUrl`
+   at 1280x720 under 2MB. Where an API offers no cover image but does offer a frame
+   selector - TikTok's `videoCoverTimestamp` - choose the frame deliberately instead of
+   letting the default stand. Where a platform exposes nothing (Facebook, LinkedIn in
+   Blotato), say so plainly rather than implying a cover was applied everywhere.
+
 1. `[FIELD]` **Lay a cover out for the profile-grid crop, not just the 1080x1920 frame.** The grid square-crops a vertical cover to roughly y 420-1500, so a headline placed to clear the top UI band (y>330) gets decapitated in the grid. Everything that must be read - headline, subject, sub-line - has to live inside that centre band while still clearing the top UI. Landing the headline at y~430 satisfies both constraints; verify by actually rendering the square crop, not by trusting the arithmetic.
 2. `[CRAFT]` **Pick the frame where the subject is looking at the camera.** Given a choice between a competent shot of someone working and an ordinary shot of them waving at the lens, take the wave. The cover's only job is to be tapped.
 3. `[CRAFT]` **Crop out dead space before compositing.** Trade-show and office photos carry large empty walls and floors. Cropping to the subject and their props lets the photo card run bigger inside the same layout, which is the whole difference between a cover that reads at thumbnail size and one that does not.
