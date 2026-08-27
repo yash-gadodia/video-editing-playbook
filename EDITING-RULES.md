@@ -371,3 +371,26 @@ Building each beat as a larger still and cropping a moving window out of it is a
    Parallel `cat` across five large files during a network switch also returns "Operation timed out"
    with a zero exit from the loop, so wrap hydration in a retry and re-check `du` afterwards rather
    than trusting the loop finished.
+
+## 19. Session additions - 2026-08-27 (scheduling a filmer's supplied edits)
+
+1. `[FIELD]` **A supplied edit from a professional filmer still gets the full frame survey,
+   and the thing it hides is camera movement.** A polished, captioned, branded cut opened
+   with a 1.8s handheld whip pan (operator swinging from a close-up to the two-shot, kept
+   in as a "transition"), and the founder flagged it on first watch - the THIRD shake
+   flag across sessions. Editors normalise their own camera moves; founders reviewing on
+   a phone do not. Survey the head of every externally-supplied cut at ~5fps before
+   accepting it, and treat any whip/settle inside the first 6 seconds as a defect, not a
+   style choice.
+2. `[FIELD]` **The trim that removes a shaky open often uncovers a better hook.** The
+   swing sat between banter ("hashtag no regrets") and a confession ("we don't
+   communicate on very small stuff"). Cutting to the settled frame lost the banter and
+   opened cold on the confession - which is the stronger opening by the hook rules
+   anyway (1.2: confession beats greeting). When a defect trim and a hook upgrade point
+   at the same in-point, take it without mourning the trimmed material.
+3. `[FIELD]` **Verify a mid-speech in-point by isolated decode at MULTIPLE candidate
+   offsets, not by the word timestamps.** Whisper stretched "we" across 4.72-5.68s (it
+   was leaning on the neighbouring words), which made every candidate cut look like it
+   chopped a word. Decoding 4s windows at three in-points 150ms apart returned the same
+   clean sentence from all three, proving the true onset sat later than the label. The
+   label lies; the isolated decode is the honest pass (same mechanism as rule 9.10b).
