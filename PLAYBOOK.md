@@ -285,3 +285,32 @@ Adopted 2026-07-08 from Thariq Shihipar (Anthropic Claude Code team, [@trq212](h
 4. **Proxy-first: rendering time is THE bottleneck.** Iterate at 540x960/15fps/ultrafast (`REEL_PROXY=1`), render a few divergent low-res cuts to compare, and only run full-res once to ship. Having the deck/site as HTML lets the agent generate dynamic animations and composite over it, rather than screenshotting stills (see [[real website screenshots]] rule, then go further and animate them).
 
 His library is closed-source for now; he said he may open-source it. Until then this section + the `templates/` helpers are our version of the same idea. Use subagents for ambitious multi-cut exploration.
+
+---
+
+## 12. Ad creative supply: paid runs on a rotation clock
+
+Organic reels are the main output, but the same pipeline also feeds Meta/Google paid ads
+(via Launch Cycle), and paid has a hard constraint organic doesn't: **every ad creative
+fatigues in 1-4 weeks.** Meta's delivery keeps re-serving the same responsive pocket of
+people (returns flatten at 4-6 exposures, go negative past ~7), the auction then ranks the
+tiring ad lower so CPM/CPC creep up BEFORE clicks visibly drop, and audiences wear out on a
+message pattern regardless of frequency. Full mechanics: `tbp-kb/docs/meta-ads-fatigue.md`.
+Proof from our own account: Product Cat Video V4 ran ~6 weeks and fell from top performer to
+1.04x ROAS (W29 report, Aug 2026).
+
+What that means for this pipeline:
+
+1. **An ad build is never one video - it's a variant set.** When cutting for paid, produce
+   2-3 variants per concept (different hook, different opening shot, different card order)
+   so the ad set can rotate before any single version wears out. The cutplan-as-JSON
+   machinery (§7) makes variants cheap: fork `cuts.json`, not the script.
+2. **Refresh cadence is ~2-3 weeks for always-on campaigns**, faster at higher spend. A
+   fatigued winner is a refresh brief, not a failure: keep the concept, swap the execution
+   (new footage subjects, new hook line, new opening 3s).
+3. **Fatigue is budgeted-for maintenance.** A steady creative pipeline is part of running
+   paid at all - plan library shoots and variant cuts on that clock, don't wait for the
+   agency to flag a dying ad.
+4. **Standing asset asks feed this** (from Launch Cycle): organic IG video repurposable for
+   PMax, and 10-15 photos of pets eating the product. When building any reel, consider
+   whether a clean no-sticker export doubles as a PMax asset.
