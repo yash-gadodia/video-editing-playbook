@@ -394,3 +394,43 @@ Building each beat as a larger still and cropping a moving window out of it is a
    chopped a word. Decoding 4s windows at three in-points 150ms apart returned the same
    clean sentence from all three, proving the true onset sat later than the label. The
    label lies; the isolated decode is the honest pass (same mechanism as rule 9.10b).
+4. `[FIELD]` **Never transcribe the same source twice - cache word timings next to the
+   footage.** A 28-minute shoot is ~10 minutes of mlx-whisper, and every new job that
+   touches the same footage pays it again. `templates/transcript_cache.py` keys the
+   whisper JSON by `sha1(basename|size|mtime)` into `SynologyDrive-sync/_transcripts/`
+   with an `index.csv`, so `get` is free on a repeat, `grep` searches every clip ever
+   transcribed at once, and a re-encode (which changes the fingerprint) correctly
+   re-runs. **`grep` across the whole cache is the real win**: it found the pricing and
+   transparency soundbites for the Aug-2026 price reel across two different interview
+   files in seconds, including the one the delivered edit had thrown away.
+5. `[FIELD]` **Prefer the RAW interview over a filmer's finished cut when the video needs
+   its own argument.** Yongnan's `Founders Pay.mp4` was fully finished (burned captions,
+   sticker intro, pinned banner), so its captions could not be retimed and its subject
+   was fixed. The raw `Interview/` files carried the SAME answer in a cleaner take ("Fun
+   fact, we have not taken a single dollar out of this business yet" - a better hook than
+   the line that survived into the delivered cut), plus a second location. Use the
+   supplied cut when you want the filmer's video; use raw when you want a different one.
+6. `[FIELD]` **Two captions enabled on the same frame render as garbled overlapping text.**
+   Clamping each caption's end to `min(own_end + tail, NEXT chunk's start)` before the
+   2-frame gap is what fixes it. Subtracting 2 frames from your own end is NOT enough -
+   the next chunk can start before your padded end, and the proof frame showed
+   "sing  business yet.  this" from two pills stacked. Also join tokens that start with
+   a hyphen onto the previous word, or whisper's "co" + "-founder" prints as "co -founder".
+7. `[FIELD]` **Assert that type fits the frame instead of eyeballing a contact sheet.**
+   A 122px Fredoka CTA measured 1092px wide in a 1080px frame and bled off both edges;
+   it was only obvious once measured. Every headline draw now runs
+   `assert tw < W - 80`, and the cover build asserts the whole type block ends above the
+   IG profile-grid bottom (y1500). The cover assert fired on the first run at y=1625.
+8. `[FIELD]` **A logo that is one flat colour disappears on a ground of that colour.**
+   `circle_icon_only.png` is dark green on transparent, so it vanished entirely on the
+   green end card and read weakly on busy footage. Always composite the mark on a filled
+   cream/teal disc rather than pasting it bare, at both badge and end-card sizes.
+9. `[FIELD]` **Cutting from live room tone to `anullsrc` silence reads as a broken file.**
+   Card beats should carry their b-roll's own event ambience ducked to ~0.18 rather than
+   digital zero. Tell: the master re-transcribe hallucinated a sentence on loop over the
+   silent stretch, which is a useful smoke alarm for dead audio in the gate-3 diff.
+10. `[FIELD]` **Verify every on-screen number against the LIVE page, not the KB doc.**
+   The price reel's `$8.81 / $7.10 / $1.71` were confirmed by curling
+   `/pages/transparent-pricing` cache-busted and matching the exact string, and the
+   deadline weekday was confirmed with `datetime` rather than trusted from prose. A
+   published price is the one claim in a reel that cannot be quietly wrong.
