@@ -188,6 +188,7 @@ Whatever your tokens are: encode them ONCE as constants in the overlay scripts, 
 
 ## 6. Footage sourcing
 
+- **Cache every transcript next to the footage, keyed by content fingerprint** (`templates/transcript_cache.py`, cache at `SynologyDrive-sync/_transcripts/`). Transcribing is the most expensive avoidable step in a build. `transcript_cache.py grep <pattern>` then searches every clip ever transcribed at once - that is how you find the one usable soundbite inside an 11-minute interview without watching it.
 - Keep the whole footage library (ours: a Synology NAS, ~100GB) **indexed in a CSV** - grep the index to locate assets, don't browse. Parse with a real CSV parser, not `awk -F,` (paths contain commas). Don't bulk-download; hydrate cloud placeholders on access.
 - Curate WITHOUT watching everything: extract one midpoint frame per candidate clip (ffmpeg `-ss mid -frames:v 1`), tile into a **contact sheet** (`-vf tile=6xN`), read the sheet, pick the strong shots.
 - Organize by folder: cook/kitchen process b-roll, pets eating, customer UGC, finished output. Check the process-footage folder FIRST for "how it's made" content.
@@ -295,7 +296,7 @@ Organic reels are the main output, but the same pipeline also feeds Meta/Google 
 fatigues in 1-4 weeks.** Meta's delivery keeps re-serving the same responsive pocket of
 people (returns flatten at 4-6 exposures, go negative past ~7), the auction then ranks the
 tiring ad lower so CPM/CPC creep up BEFORE clicks visibly drop, and audiences wear out on a
-message pattern regardless of frequency. Full mechanics: `tbp-kb/docs/meta-ads-fatigue.md`.
+message pattern regardless of frequency. Full mechanics: `tbp-kb/docs/content/meta-ads-fatigue.md`.
 Proof from our own account: Product Cat Video V4 ran ~6 weeks and fell from top performer to
 1.04x ROAS (W29 report, Aug 2026).
 
