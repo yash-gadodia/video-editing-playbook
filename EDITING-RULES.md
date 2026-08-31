@@ -434,3 +434,23 @@ Building each beat as a larger still and cropping a moving window out of it is a
    `/pages/transparent-pricing` cache-busted and matching the exact string, and the
    deadline weekday was confirmed with `datetime` rather than trusted from prose. A
    published price is the one claim in a reel that cannot be quietly wrong.
+
+## 20. Session additions - 2026-08-31 (hook surgery on a filmer's burned-caption cuts, six-piece schedule)
+
+1. `[FIELD]` **Measure each supplied cut's sticker preroll separately; it is not a constant.**
+   Three cuts from the same filmer and the same shoot carried 3.76s, 4.00s and 6.32s of
+   "founder series" sticker before the first usable frame. On the long one the speech
+   ("we are friends, we are friends") had already started under the sticker, so the in-point
+   moved to the next sentence, which was the stronger cold open anyway (rule 19.2 again). A
+   4s trim applied by assumption would have shipped the third cut opening on a sticker.
+2. `[FIELD]` **When captions are burned in, the hook lives in the band between the filmer's
+   pinned banner and the heads.** A cream pill with teal Fredoka type, 64px, held 3.2s with a
+   0.3s alpha fade, at y~368 on 1080x1920 for a one-line banner and y~402 for a two-line
+   banner. Proof-frame it per cut: the first pass overlapped the banner on two of three cuts
+   and the two-line banner on the third, and both were invisible until composited.
+3. `[FIELD]` **Blotato rejects Instagram captions with more than 5 hashtags** ("Instagram
+   allows a maximum of 5 hashtags per post"), and the rejection only comes back at schedule
+   time, so a batch of 30 loses its IG reels silently unless every result is read. Cap IG at 5
+   in the caption doc; TikTok and YouTube take more.
+4. `[CRAFT]` **Schedule the reel's IG Story two hours after the reel, not at the same
+   minute.** The story card says "new reel on the feed"; it has to be true when it is seen.
