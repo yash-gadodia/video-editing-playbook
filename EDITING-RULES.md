@@ -490,3 +490,25 @@ Building each beat as a larger still and cropping a moving window out of it is a
 5. `[FIELD]` **This machine's ffmpeg has no `drawtext` filter.** Labelled contact sheets die
    with "No such filter: 'drawtext'" mid-loop. Tile the frames in known order and label in PIL,
    or skip the labels.
+6. `[FIELD]` **Snap every cut to a measured RMS valley, not to a Whisper word boundary.**
+   Rules 5.x already say Whisper underestimates word ENDS; the sharper failure is that it also
+   mislabels the next word's START, and the two errors together invent a gap that is not there
+   or hide one that is. On the beat that shipped and got flagged, "giveaway" was labelled
+   ending 120.52 and the following "So" labelled starting 120.52 - no gap, so the cut went in
+   at 120.60 on the usual small tail. The envelope said otherwise: she was still at **-9 dB
+   through 120.72** and the next sentence did not start until **121.08**, a real 0.35s valley
+   that the transcript had erased by starting "So" 0.56s early. The cut landed mid-vowel and
+   the founder caught it on first watch. Decode the whole take once to a 10ms RMS envelope,
+   then for every planned boundary print the dB AT that boundary: anything above about -20 dB
+   is inside speech and is a defect, whether it is an out-point chopping a word or an in-point
+   carrying the tail of the previous one. Snap to the deepest valley in a +-0.5s search window.
+   This is a ten-line check over the whole beat table and it is the only thing that catches the
+   class, because a frame sheet cannot show it and the §12.9 deletes gate passes clean - the
+   word IS present in the master, just amputated.
+7. `[FIELD]` **Some cuts have no clean out-point, and the honest move is to say so.** The same
+   envelope pass flagged a second boundary where the speaker ran her punchline straight into
+   the next sentence with no valley anywhere in the following 0.6s. There was no fix that did
+   not either strand a dangling fragment or eat the punchline, so it shipped unchanged and
+   named in the handoff as unresolved. Do not burn two rebuilds hunting a valley that the
+   performance never produced; measure, fix the ones that are fixable, and flag the rest for
+   the person who can hear it.
