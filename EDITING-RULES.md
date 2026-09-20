@@ -454,3 +454,39 @@ Building each beat as a larger still and cropping a moving window out of it is a
    in the caption doc; TikTok and YouTube take more.
 4. `[CRAFT]` **Schedule the reel's IG Story two hours after the reel, not at the same
    minute.** The story card says "new reel on the feed"; it has to be true when it is seen.
+
+## 21. Session additions - 2026-09-20 (collab interview off a Telegram re-compress)
+
+1. `[FIELD]` **Attribute a two-hander by PITCH, not by mouth motion, whenever one person is
+   reacting.** Rule 18.1's mouth-ROI pass called the best line in a take for the wrong speaker
+   by a decisive 1.78-vs-0.97 margin, because the man was laughing through the whole 3.2s
+   window while the woman delivered it. A median-f0 pass over the same window settled it in
+   one shot: her known beats ran 205-208 Hz, his 131 Hz, and the disputed window read 271 Hz -
+   her, pitched up because she was doing an impression. Mouth motion answers "whose face is
+   moving", which is not the question. Measure f0 first, and keep mouth motion for the case
+   where both voices sit in the same register. Autocorrelation over 1024-sample windows above
+   an RMS floor is about ten lines and needs no model.
+2. `[FIELD]` **A rounded shot boundary inside a beat can leave a 1-frame orphan span, and the
+   concat filter eats it.** Cutting video per SHOT inside audio cut per BEAT (rule 18.2) means
+   two independent roundings - `frames_of(beat_dur)` and `frames_of(shot_rel_out)` - and when
+   the last shot's rounded end lands one frame short of the beat's, you get a 1-frame segment
+   at the seam. Every per-segment frame assert passes, then the join comes back one frame
+   light and the §12.11 total assert is the only thing that catches it. Absorb any interval
+   under 2 frames into its neighbour when building the mark list, rather than hunting the
+   off-by-one afterwards.
+3. `[FIELD]` **A near-zero word timestamp on a load-bearing noun means cut the clause, not
+   caption it carefully.** Rule 9c covers the two-speakers-at-once case; the same 0.00s span
+   shows up on a single speaker when the decoder is guessing. "There isn't any sort of ???
+   repository" split four passes between "central" and "essential" with the word timed
+   85.66-85.66. The fix was not a fifth decode: the other founder had already said the same
+   thing cleanly ("collate all this in one centralised place"), so the whole clause went. Rule
+   10d's restatement search applies to undecodable words, not just to unusable pictures.
+4. `[FIELD]` **A video that arrived over Telegram is a 720p re-compress, and the xattrs say
+   so.** `xattr -l` returns `com.apple.assetsd.creatorBundleID: ph.telegra.Telegraph` and the
+   original filename. Telegram caps video sends at 720p unless the sender chose "send as
+   File", so the ceiling on the edit is set before you open it: full-frame delivery is a 1.5x
+   upscale and a single is ~2.6x. Both survive Instagram, but check provenance at the top of
+   the session and ask for the File version before designing any beat around a punch-in.
+5. `[FIELD]` **This machine's ffmpeg has no `drawtext` filter.** Labelled contact sheets die
+   with "No such filter: 'drawtext'" mid-loop. Tile the frames in known order and label in PIL,
+   or skip the labels.
